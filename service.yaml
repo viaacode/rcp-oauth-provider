@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ${APP}-${ENV}
+  name: ${APP}-${ENV}
+spec:
+  ports:
+  - name: https
+    port: 8443
+    protocol: TCP
+    targetPort: 8443
+  selector:
+    deployment: ${APP}-${ENV}
+  sessionAffinity: None
+  type: ClusterIP
+  ClusterIP: None
+status:
+  loadBalancer: {}

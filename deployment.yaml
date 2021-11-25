@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ${APP}-${ENV}
+  name: ${APP}-${ENV}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ${APP}-${ENV}
+      deployment: ${APP}-${ENV}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  template:
+    metadata:
+      labels:
+        app: ${APP}-${ENV}
+        deployment: ${APP}-${ENV}
+    spec:
+      containers:
+      - env:
+        - name: config_location
+          value: /opt/skryv/application.properties
+        imagePullPolicy: IfNotPresent
+        image: oauth-provider:${ENV}
+        name: ${APP}-${ENV}
+        ports:
+        - containerPort: 8443
+          protocol: TCP
+        livenessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 180
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 10
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources:
+          requests:
+            memory: "1G"
+            cpu: "100m"
+          limits:
+            memory: "2G"
+            cpu: 1
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /opt/skryv
+          name: application-properties
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 90
+      volumes:
+      - name: application-properties
+        secret:
+          defaultMode: 420
+          secretName: ${APP}-${ENV}-config

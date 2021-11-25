@@ -1,0 +1,20 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: ${APP}-${ENV}
+spec:
+  ingressClassName: nginx-qas
+  host: ${HOSTNAME}
+  tls:
+    secret: star.viaa.be
+  upstreams:
+  - name: ${APP}-${ENV}
+    service: ${APP}-${ENV}
+    port: 8443
+    tls:
+      enable: true
+  routes:
+  - path: /
+    action:
+      pass: ${APP}-${ENV}
+
