@@ -1,6 +1,15 @@
 apiVersion: k8s.nginx.org/v1
 kind: VirtualServer
 metadata:
+  labels:
+    app: ${APP}
+    env: ${ENV}
+    app.openshift.io/runtime: ${APP}
+    app.kubernetes.io/name: ${APP}
+    app.kubernetes.io/part-of: ${APP}
+    app.kubernetes.io/instance: ${APP}-${ENV}
+    app.kubernetes.io/component: ${APP}-${ENV}
+    app.openshift.io/runtime-version: ${ENV}
   name: ${APP}-${ENV}
 spec:
   ingressClassName: nginx-qas

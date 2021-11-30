@@ -2,7 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ${APP}-${ENV}
+    app: ${APP}
+    env: ${ENV}
+    app.openshift.io/runtime: ${APP}
+    app.kubernetes.io/name: ${APP}
+    app.kubernetes.io/part-of: ${APP}
+    app.kubernetes.io/instance: ${APP}-${ENV}
+    app.kubernetes.io/component: ${APP}-${ENV}
+    app.openshift.io/runtime-version: ${ENV}
   name: ${APP}-${ENV}
 spec:
   ports:
@@ -11,7 +18,8 @@ spec:
     protocol: TCP
     targetPort: 8443
   selector:
-    deployment: ${APP}-${ENV}
+    app: ${APP}
+    env: ${ENV}
   sessionAffinity: None
   type: ClusterIP
   ClusterIP: None

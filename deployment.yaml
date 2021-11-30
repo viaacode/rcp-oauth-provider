@@ -2,14 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ${APP}-${ENV}
+    app: ${APP}
+    env: ${ENV}
+    app.openshift.io/runtime: ${APP}
+    app.kubernetes.io/name: ${APP}
+    app.kubernetes.io/part-of: ${APP}
+    app.kubernetes.io/instance: ${APP}-${ENV}
+    app.kubernetes.io/component: ${APP}-${ENV}
+    app.openshift.io/runtime-version: ${ENV}
   name: ${APP}-${ENV}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ${APP}-${ENV}
-      deployment: ${APP}-${ENV}
+      app: ${APP}
+      env: ${ENV}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,7 +25,8 @@ spec:
   template:
     metadata:
       labels:
-        app: ${APP}-${ENV}
+        app: ${APP}
+        env: ${ENV}
         deployment: ${APP}-${ENV}
     spec:
       containers:
@@ -32,12 +40,12 @@ spec:
         - containerPort: 8443
           protocol: TCP
         livenessProbe:
-          failureThreshold: 2
+          failureThreshold: 3
           httpGet:
             path: /
             port: 8443
             scheme: HTTPS
-          initialDelaySeconds: 180
+          initialDelaySeconds: 90
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 10
@@ -47,7 +55,7 @@ spec:
             path: /
             port: 8443
             scheme: HTTPS
-          initialDelaySeconds: 120
+          initialDelaySeconds: 90
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 10
