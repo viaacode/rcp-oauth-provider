@@ -12,10 +12,10 @@ metadata:
     app.openshift.io/runtime-version: ${ENV}
   name: ${APP}-${ENV}
 spec:
-  ingressClassName: nginx-qas
+  ingressClassName: nginx-${ENV}
   host: ${HOSTNAME}
   tls:
-    secret: star.viaa.be
+    secret: star.viaa.be-${ENV}
   upstreams:
   - name: ${APP}-${ENV}
     service: ${APP}-${ENV}
