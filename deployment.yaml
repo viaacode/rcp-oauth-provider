@@ -1,6 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    image.openshift.io/triggers: >-
+      [{"from": {"kind": "ImageStreamTag", "name": "oauth-provider:${ENV}"},
+      "fieldPath":
+      "spec.template.spec.containers[?(@.name==\"${APP}-${ENV}\")].image"}]
   labels:
     app: ${APP}
     env: ${ENV}

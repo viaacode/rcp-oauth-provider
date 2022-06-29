@@ -10,11 +10,15 @@ contract app with meemoo ldap credentials.
 ### Login to OCP and select the target namespace
 
 ### Create the skryv docker repo credential
-
 ```
-oc create secret docker-registry <registry hostname> \
+oc create secret docker-registry <secretname> \
      --docker-server=<registry hostname>   --docker-username=<username> \
      --docker-password=`<password>`   --docker-email=<email>
+```
+
+### Link the secret to the default service account
+```
+oc secrets link default <secretname> --for=pull
 ```
 
 ### Import and tag the image stream
@@ -25,11 +29,12 @@ oc tag <image>:<tag> <image>:prd
 oc set image-lookup oauth-provider
 ```
 
-### Create the SSL certificate/key secret star.viaa.be
+### Create the SSL certificate/key secrets star.viaa.be-<env>
 
 ### Deploy the resources as define in the yaml files of this repo
+```
 ./deploy.sh param.qas
-
+```
 
 ## Deploy script
 
