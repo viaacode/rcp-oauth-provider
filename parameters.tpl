@@ -19,3 +19,19 @@ parameters:
   name: HOSTNAME
   displayName: Hostname
   required: true
+- description: TLS certificate sha1 fingerprint as given by openssl x509 -fingerprint
+  name: TLS_CERT_FINGERPRINT
+  displayname: TLS_CERT_FINGERPRINT
+  required: true
+- description: TLS certificate expiry date YYYY-MM-DD
+  name: TLS_CERT_EXPIRY
+  displayname: TLS_CERT_EXPIRY
+  required: true
+- description: meemoo.be/ingressclass
+  name: INGRESSCLASS
+  displayname: INGRESSCLASS
+  required: true
+- description: Kubernetes IngressClassName
+  name: INGRESSCLASSNAME
+  displayname: INGRESSCLASSNAME
+  required: true

@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    route.openshift.io/termination: passthrough
+  labels:
+    app: ${APP}
+    app.kubernetes.io/component: ${APP}-${ENV}
+    app.kubernetes.io/instance: ${APP}-${ENV}
+    app.kubernetes.io/name: ${APP}
+    app.kubernetes.io/part-of: ${APP}
+    app.openshift.io/runtime: ${APP}
+    app.openshift.io/runtime-version: ${ENV}
+    env: ${ENV}
+    meemoo.be/ingressclass: ${INGRESSCLASS}
+  name: ${APP}-${ENV}
+spec:
+  ingressClassName: ${INGRESSCLASSNAME}
+  rules:
+  - host: ${HOSTNAME}
+    http:
+      paths:
+      - backend:
+          service:
+            name: ${APP}-${ENV}
+            port:
+              number: 8443
+        pathType: ImplementationSpecific
